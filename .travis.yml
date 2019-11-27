@@ -20,13 +20,12 @@ before_install:
   - pip install -U pip setuptools docker
   - pip install ansible
 
+  # Prepare target nodes
+  - docker run -d --privileged --name node-1 -h node-1 irixjp/katacoda:latest /sbin/init
+  - docker run -d --privileged --name node-2 -h node-2 irixjp/katacoda:latest /sbin/init
+  - docker run -d --privileged --name node-3 -h node-3 irixjp/katacoda:latest /sbin/init
 script:
-  - >
-    docker run -d --security-opt label:disable
-    --cap-add SYS_ADMIN
-    --name node-1
-    -h node-1
-    irixjp/katacoda:latest /sbin/init
+  - ansible --version
   - docker ps -a
   - docker exec node-1 sh -c "ps -ef"
   - docker exec node-1 sh -c "systemctl start sshd"
